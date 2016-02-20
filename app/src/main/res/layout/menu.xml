@@ -18,11 +18,18 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="OpenGl View"
+        android:width="120dp"
+        android:id="@+id/opengl"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Exit"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/exit"
-        android:layout_below="@+id/newgame"
-        android:layout_alignLeft="@+id/newgame"
-        android:layout_alignStart="@+id/newgame"
+        android:layout_below="@+id/opengl"
         android:width="120dp" />
+
 </LinearLayout>

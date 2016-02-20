@@ -59,5 +59,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button opengl= (Button) findViewById(R.id.opengl);
+        opengl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), OpenGl.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

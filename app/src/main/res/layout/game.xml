@@ -24,66 +24,29 @@
         />
 
     <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:id="@+id/speedup"
         android:background="@drawable/up"
         android:layout_above="@+id/speeddown"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
         android:alpha=".3"/>
 
     <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:id="@+id/speeddown"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@drawable/down"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
         android:alpha=".3"/>
 
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:id="@+id/left"
-        android:background="@drawable/left"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/down"
-        android:layout_toStartOf="@+id/down"
-        android:alpha=".3"/>
 
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:id="@+id/right"
-        android:background="@drawable/right"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/down"
-        android:layout_toEndOf="@+id/down"
-        android:alpha=".3"/>
-
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:id="@+id/down"
-        android:background="@drawable/down"
-        android:layout_below="@+id/up"
-        android:layout_alignLeft="@+id/up"
-        android:layout_alignStart="@+id/up"
-        android:alpha=".3"/>
-
-    <Button
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:id="@+id/up"
-        android:background="@drawable/up"
-        android:layout_marginRight="58dp"
-        android:layout_marginEnd="58dp"
-        android:alpha=".3"
-        android:layout_above="@+id/left"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -131,34 +94,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="fuel"
-        android:textColor="#ffffff"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/speed"
         android:textColor="#ffffff"
         android:layout_marginLeft="5dp"
         android:layout_below="@+id/distance"
         android:layout_toRightOf="@+id/textView2"
         android:layout_toEndOf="@+id/textView2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/fuel"
-        android:layout_below="@+id/speed"
-        android:layout_marginLeft="5dp"
-        android:textColor="#ffffff"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -179,5 +120,13 @@
         android:layout_alignLeft="@+id/x"
         android:layout_alignStart="@+id/x" />
 
+    <com.example.aleksejs.pangumobileapp.JoystickView
+        android:id="@+id/joystickView"
+        android:layout_width="225dp"
+        android:layout_height="225dp"
+        android:alpha=".3"
+        android:layout_alignBottom="@+id/speeddown"
+        android:layout_alignRight="@+id/y"
+        android:layout_alignEnd="@+id/y" />
 
 </RelativeLayout>

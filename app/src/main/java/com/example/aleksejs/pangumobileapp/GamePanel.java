@@ -1,33 +1,23 @@
 package com.example.aleksejs.pangumobileapp;
 
-import android.app.Activity;
-import android.content.Context;
+import com.example.aleksejs.pangumobileapp.JoystickView;
+import com.example.aleksejs.pangumobileapp.JoystickView.OnJoystickMoveListener;
+
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.StrictMode;
-import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
-import android.util.Xml;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Handler;
 
 import uk.ac.dundee.spacetech.pangu.ClientLibrary.ClientConnection;
 
@@ -38,17 +28,16 @@ public class GamePanel extends AppCompatActivity {
 
     ClientConnection connectToPangu = connectToPangu();
 
-    float x=0, y=0, z=400, yw=0, pt=-90, rl=0;
+    float x=0, y=600, z=0, yw=0, pt=-180, rl=0;
 
-    float incx=0, incy=0;
-
-    float speedFloat=0;
-    float fuelFloat=100;
+    float incpt=0, incyw=0, speed=0;
 
     ImageView background;
     Bitmap image;
 
-    TextView speed, fuel, message, distance, x2, y2;
+    private JoystickView joystick;
+
+    TextView distance, x2, y2, speedText;
 
     boolean running = true;
 
@@ -68,9 +57,7 @@ public class GamePanel extends AppCompatActivity {
 
         background = (ImageView)findViewById(R.id.background);
         distance = (TextView)findViewById(R.id.distance);
-        message = (TextView)findViewById(R.id.message);
-        speed = (TextView)findViewById(R.id.speed);
-        fuel = (TextView)findViewById(R.id.fuel);
+        speedText = (TextView)findViewById(R.id.speed);
         x2 = (TextView)findViewById(R.id.x);
         y2 = (TextView)findViewById(R.id.y);
 
@@ -80,23 +67,15 @@ public class GamePanel extends AppCompatActivity {
             public void run() {
                 while (running) {
 
-                    if (z==100) {
-                        runOnUiThread(new Runnable() //run on ui thread
-                        {
-                            public void run() {
-                                message.setText("You lost");
-                            }
-                        });
-                        running = false;
+                    if (speed>0) {
+                        y = y -  ( (float) Math.cos(Math.toRadians(speed *incpt)) * (float) Math.cos(Math.toRadians(speed *incyw)) );
+                        z = z +  (float) Math.sin(Math.toRadians(speed *incpt));
+                        x = x +  (float) Math.sin(Math.toRadians(speed *incyw));
                     }
-
-                   // z = z - 1;
-
-                    if (speedFloat!=0) {
-                        x = x + (incx * speedFloat);
-                        y = y + (incy * speedFloat);
-                        z = z - 0.5f;
-                        fuelFloat = fuelFloat - (speedFloat/10);
+                    else if (speed<0){
+                        y = y +  ( (float) Math.cos(Math.toRadians(speed *incpt)) * (float) Math.cos(Math.toRadians(speed *incyw)) );
+                        z = z -  (float) Math.sin(Math.toRadians(speed *incpt));
+                        x = x -  (float) Math.sin(Math.toRadians(speed *incyw));
                     }
 
                     image = getImage(connectToPangu, x, y, z, yw, pt, rl);
@@ -104,11 +83,10 @@ public class GamePanel extends AppCompatActivity {
                     runOnUiThread(new Runnable() //run on ui thread
                     {
                         public void run() {
-                            distance.setText(String.valueOf(z-100));
-                            speed.setText(String.valueOf(speedFloat));
-                            fuel.setText(String.valueOf(fuelFloat));
+                            distance.setText(String.valueOf(y-100));
+                            speedText.setText(String.valueOf(speed));
                             x2.setText(String.valueOf(x));
-                            y2.setText(String.valueOf(y));
+                            y2.setText(String.valueOf(z));
                             background.setImageBitmap(image);
                             background.invalidate();
                         }
@@ -117,60 +95,61 @@ public class GamePanel extends AppCompatActivity {
             }
         };
 
-        Button left=(Button)findViewById(R.id.left);
-        left.setOnClickListener(new Button.OnClickListener() {
-            @Override
+        Button speedup = (Button) findViewById(R.id.speedup);
+        speedup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                   yw = yw + 0.5f;
-                   incx = incx + 0.5f;
-               }
-           });
-
-        Button right=(Button)findViewById(R.id.right);
-        right.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                       yw = yw - 0.5f;
-                       incx = incx + 0.5f;
-                   }
-               });
-
-        Button up=(Button)findViewById(R.id.up);
-        up.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                        pt = pt + 0.5f;
-                        incy = incy + 0.5f;
-                    }
-
-                });
-
-        Button down=(Button)findViewById(R.id.down);
-        down.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pt = pt - 0.5f;
-                incy = incy - 0.5f;
-            }
-
-        });
-
-        Button speedup=(Button)findViewById(R.id.speedup);
-        speedup.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                speedFloat = speedFloat + 1;
-                fuelFloat = fuelFloat - 0.1f;
+                speed++;
             }
         });
 
-        Button speeddown=(Button)findViewById(R.id.speeddown);
-        speeddown.setOnClickListener(new Button.OnClickListener() {
-            @Override
+        Button speeddown = (Button) findViewById(R.id.speeddown);
+        speeddown.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                       speedFloat = speedFloat - 1;
-                   }
-               });
+                speed--;
+            }
+        });
+
+        joystick = (JoystickView) findViewById(R.id.joystickView);
+        // Listener of events, it'll return the angle in graus and power in percents
+        // return to the direction of the moviment
+        joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
+            @Override
+            public void onValueChanged(int angle, int power, int direction) {
+                switch (direction) {
+                    case JoystickView.FRONT:
+                        incpt=incpt+0.1f; pt=pt+0.1f;
+                        break;
+
+                    case JoystickView.FRONT_RIGHT:
+                        incpt=incpt+0.1f; incyw=incyw+0.1f; pt=pt+0.1f; yw=yw-0.1f;
+                        break;
+
+                    case JoystickView.RIGHT:
+                        incyw=incyw+0.1f; yw=yw-0.1f;
+                        break;
+
+                    case JoystickView.RIGHT_BOTTOM:
+                        incpt=incpt-0.1f; incyw=incyw+0.1f;  pt=pt-0.1f; yw=yw-0.1f;
+                        break;
+
+                    case JoystickView.BOTTOM:
+                        incpt=incpt-0.1f; pt=pt-0.1f;
+                        break;
+
+                    case JoystickView.BOTTOM_LEFT:
+                        incpt=incpt-0.1f; incyw=incyw-0.1f; pt=pt-0.1f; yw=yw+0.1f;
+                        break;
+
+                    case JoystickView.LEFT:
+                        incyw=incyw-0.1f; yw=yw+0.1f;
+                        break;
+
+                    case JoystickView.LEFT_FRONT:
+                        incpt=incpt+0.1f; incyw=incyw-0.1f; pt=pt+0.1f; yw=yw+0.1f;
+                        break;
+                }
+            }
+        }, JoystickView.DEFAULT_LOOP_INTERVAL);
 
         gameThread.start();
     }
@@ -180,13 +159,13 @@ public class GamePanel extends AppCompatActivity {
         try {
             Socket connectionSocket = new Socket("192.168.0.11", 10363);
             connectionToPanguServer = new ClientConnection(connectionSocket);
-            Log.v("log : ", "connected");
+            Log.v("log : ", "COOOONNEEEECTED");
             return connectionToPanguServer;
         }
         catch (IOException ie) {
             ie.printStackTrace();
         }
-        Log.v("log : ", "not connected");
+        Log.v("log : ", "not COOOONNEEEECTED");
         return connectionToPanguServer;
     }
 
@@ -202,7 +181,6 @@ public class GamePanel extends AppCompatActivity {
         }
         Log.v("log : ", "image failed");
         return bitmapImage;
-
     }
 
     public static Bitmap ReadBitmapFromPPM(byte[] file) throws IOException {
