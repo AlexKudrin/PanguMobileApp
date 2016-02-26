@@ -81,37 +81,9 @@ public class JoystickView extends View implements Runnable {
 		xPosition = (int) getWidth() / 2;
 		yPosition = (int) getWidth() / 2;
 		int d = Math.min(xNew, yNew);
-		buttonRadius = (int) (d / 2 * 0.25);
-		joystickRadius = (int) (d / 2 * 1);
+		buttonRadius = (int) (d / 2 * 0.5);
+		joystickRadius = (int) (d / 2 * 1.5);
 
-	}
-
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		// setting the measured values to resize the view to a certain width and
-		// height
-		int d = Math.min(measure(widthMeasureSpec), measure(heightMeasureSpec));
-
-		setMeasuredDimension(d, d);
-
-	}
-
-	private int measure(int measureSpec) {
-		int result = 0;
-
-		// Decode the measurement specifications.
-		int specMode = MeasureSpec.getMode(measureSpec);
-		int specSize = MeasureSpec.getSize(measureSpec);
-
-		if (specMode == MeasureSpec.UNSPECIFIED) {
-			// Return a default size of 200 if no bounds are specified.
-			result = 200;
-		} else {
-			// As you want to fill the available space
-			// always return the full available bounds.
-			result = specSize;
-		}
-		return result;
 	}
 
 	@Override

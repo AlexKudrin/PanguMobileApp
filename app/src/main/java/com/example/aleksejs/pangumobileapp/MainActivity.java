@@ -1,21 +1,12 @@
 package com.example.aleksejs.pangumobileapp;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-
-import java.io.IOException;
-import java.net.Socket;
-
-import uk.ac.dundee.spacetech.pangu.ClientLibrary.ClientConnection;
 
 public class MainActivity extends AppCompatActivity {
 

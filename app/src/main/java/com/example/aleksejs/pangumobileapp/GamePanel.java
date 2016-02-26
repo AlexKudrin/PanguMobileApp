@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.io.IOException;
 import java.net.Socket;
+import android.os.Handler;
 
 import uk.ac.dundee.spacetech.pangu.ClientLibrary.ClientConnection;
 
@@ -28,18 +28,18 @@ public class GamePanel extends AppCompatActivity {
 
     ClientConnection connectToPangu = connectToPangu();
 
-    float x=0, y=600, z=0, yw=0, pt=-180, rl=0;
+    static float x=0, y=600, z=0, yw=0, pt=-180, rl=0;
 
-    float incpt=0, incyw=0, speed=0;
+    static float incpt=0, incyw=0, speed=0;
 
-    ImageView background;
-    Bitmap image;
+    static ImageView background;
+    static Bitmap image;
 
-    private JoystickView joystick;
+    static private JoystickView joystick;
 
-    TextView distance, x2, y2, speedText;
+    static TextView distance, speedText;
 
-    boolean running = true;
+    static boolean running = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,6 @@ public class GamePanel extends AppCompatActivity {
         background = (ImageView)findViewById(R.id.background);
         distance = (TextView)findViewById(R.id.distance);
         speedText = (TextView)findViewById(R.id.speed);
-        x2 = (TextView)findViewById(R.id.x);
-        y2 = (TextView)findViewById(R.id.y);
 
         Thread gameThread = new Thread()
         {
@@ -68,14 +66,14 @@ public class GamePanel extends AppCompatActivity {
                 while (running) {
 
                     if (speed>0) {
-                        y = y -  ( (float) Math.cos(Math.toRadians(speed *incpt)) * (float) Math.cos(Math.toRadians(speed *incyw)) );
-                        z = z +  (float) Math.sin(Math.toRadians(speed *incpt));
-                        x = x +  (float) Math.sin(Math.toRadians(speed *incyw));
+                        y = y - speed * ( (float) Math.cos(Math.toRadians(incpt)) * (float) Math.cos(Math.toRadians(incyw)));
+                        z = z + speed * ( (float) Math.sin(Math.toRadians(incpt)) * (float) Math.cos(Math.toRadians(incyw)));
+                        x = x + speed * ( (float) Math.sin(Math.toRadians(incpt)) );
                     }
                     else if (speed<0){
-                        y = y +  ( (float) Math.cos(Math.toRadians(speed *incpt)) * (float) Math.cos(Math.toRadians(speed *incyw)) );
-                        z = z -  (float) Math.sin(Math.toRadians(speed *incpt));
-                        x = x -  (float) Math.sin(Math.toRadians(speed *incyw));
+                        y = y + speed * ( (float) Math.cos(Math.toRadians(incpt)) * (float) Math.cos(Math.toRadians(incyw)) );
+                        z = z - speed * (float) Math.sin(Math.toRadians(incpt));
+                        x = x - speed * (float) Math.sin(Math.toRadians(incyw));
                     }
 
                     image = getImage(connectToPangu, x, y, z, yw, pt, rl);
@@ -85,8 +83,6 @@ public class GamePanel extends AppCompatActivity {
                         public void run() {
                             distance.setText(String.valueOf(y-100));
                             speedText.setText(String.valueOf(speed));
-                            x2.setText(String.valueOf(x));
-                            y2.setText(String.valueOf(z));
                             background.setImageBitmap(image);
                             background.invalidate();
                         }
@@ -110,42 +106,57 @@ public class GamePanel extends AppCompatActivity {
         });
 
         joystick = (JoystickView) findViewById(R.id.joystickView);
-        // Listener of events, it'll return the angle in graus and power in percents
-        // return to the direction of the moviment
+
         joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
             @Override
             public void onValueChanged(int angle, int power, int direction) {
                 switch (direction) {
                     case JoystickView.FRONT:
-                        incpt=incpt+0.1f; pt=pt+0.1f;
+                        incpt = incpt + 0.1f;
+                        pt = pt + 0.1f;
                         break;
 
                     case JoystickView.FRONT_RIGHT:
-                        incpt=incpt+0.1f; incyw=incyw+0.1f; pt=pt+0.1f; yw=yw-0.1f;
+                        incpt = incpt + 0.1f;
+                        incyw = incyw + 0.1f;
+                        pt = pt + 0.1f;
+                        yw = yw - 0.1f;
                         break;
 
                     case JoystickView.RIGHT:
-                        incyw=incyw+0.1f; yw=yw-0.1f;
+                        incyw = incyw + 0.1f;
+                        yw = yw - 0.1f;
                         break;
 
                     case JoystickView.RIGHT_BOTTOM:
-                        incpt=incpt-0.1f; incyw=incyw+0.1f;  pt=pt-0.1f; yw=yw-0.1f;
+                        incpt = incpt - 0.1f;
+                        incyw = incyw + 0.1f;
+                        pt = pt - 0.1f;
+                        yw = yw - 0.1f;
                         break;
 
                     case JoystickView.BOTTOM:
-                        incpt=incpt-0.1f; pt=pt-0.1f;
+                        incpt = incpt - 0.1f;
+                        pt = pt - 0.1f;
                         break;
 
                     case JoystickView.BOTTOM_LEFT:
-                        incpt=incpt-0.1f; incyw=incyw-0.1f; pt=pt-0.1f; yw=yw+0.1f;
+                        incpt = incpt - 0.1f;
+                        incyw = incyw - 0.1f;
+                        pt = pt - 0.1f;
+                        yw = yw + 0.1f;
                         break;
 
                     case JoystickView.LEFT:
-                        incyw=incyw-0.1f; yw=yw+0.1f;
+                        incyw = incyw - 0.1f;
+                        yw = yw + 0.1f;
                         break;
 
                     case JoystickView.LEFT_FRONT:
-                        incpt=incpt+0.1f; incyw=incyw-0.1f; pt=pt+0.1f; yw=yw+0.1f;
+                        incpt = incpt + 0.1f;
+                        incyw = incyw - 0.1f;
+                        pt = pt + 0.1f;
+                        yw = yw + 0.1f;
                         break;
                 }
             }
@@ -154,7 +165,7 @@ public class GamePanel extends AppCompatActivity {
         gameThread.start();
     }
 
-    public ClientConnection connectToPangu(){
+    static public ClientConnection connectToPangu(){
         ClientConnection connectionToPanguServer=null;
         try {
             Socket connectionSocket = new Socket("192.168.0.11", 10363);
@@ -169,7 +180,7 @@ public class GamePanel extends AppCompatActivity {
         return connectionToPanguServer;
     }
 
-    public Bitmap getImage(ClientConnection connectToPangu, float x, float y, float z,float yw,float pt,float rl){
+    static public Bitmap getImage(ClientConnection connectToPangu, float x, float y, float z,float yw,float pt,float rl){
         Bitmap bitmapImage = null;
         try {
             byte[] imagebyte = connectToPangu.getImageByDegrees(x, y, z, yw, pt, rl);
