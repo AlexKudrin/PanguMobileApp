@@ -54,9 +54,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
      */
     private final Context mContext;
 
-
+    float camx=0, camy=0;
     private VelocityTracker mVelocityTracker = null;
-
 
     /**
      * Constructor to set the handed over context.
@@ -79,8 +78,15 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(final GL10 gl) {
         gl.glClearColor(0f, 0f, 0f, 0.0f);
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+       // gl.glMatrixMode(GL10.GL_PROJECTION);
+        //gl.glLoadIdentity();
+        //GLU.gluLookAt(gl, 0, 0, 0, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+
+        gl.glTranslatef(camx, 0, 0);
+
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
-        gl.glTranslatef(-4.0f, 2.0f, OBJECT_DISTANCE);
+        gl.glTranslatef(0f, 0f, OBJECT_DISTANCE);
         this.Sun.draw(gl);
         gl.glLoadIdentity();
         gl.glTranslatef(-1.2f, 2.0f, OBJECT_DISTANCE);
@@ -95,16 +101,16 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         gl.glTranslatef(5f, 2.0f, OBJECT_DISTANCE);
         this.Mars.draw(gl);
         gl.glLoadIdentity();
-        gl.glTranslatef(-4.5f, -1.6f, OBJECT_DISTANCE);
+        gl.glTranslatef(-4.5f, -1.5f, OBJECT_DISTANCE);
         this.Jupiter.draw(gl);
         gl.glLoadIdentity();
-        gl.glTranslatef(-1.1f, -1.1f, OBJECT_DISTANCE);
+        gl.glTranslatef(-1.1f, -1.5f, OBJECT_DISTANCE);
         this.Saturn.draw(gl);
         gl.glLoadIdentity();
-        gl.glTranslatef(1.8f, -1.1f, OBJECT_DISTANCE);
+        gl.glTranslatef(1.8f, -1.5f, OBJECT_DISTANCE);
         this.Uran.draw(gl);
         gl.glLoadIdentity();
-        gl.glTranslatef(4.6f, -1.1f, OBJECT_DISTANCE);
+        gl.glTranslatef(4.6f, -1.5f, OBJECT_DISTANCE);
         this.Neptune.draw(gl);
 
     }
@@ -115,9 +121,10 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
-        GLU.gluPerspective(gl, FIELD_OF_VIEW_Y, aspectRatio, Z_NEAR, Z_FAR);
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
+        GLU.gluPerspective(gl, 45, aspectRatio, Z_NEAR, Z_FAR);
+        //gl.glTranslatef(camx, 0, 0);
+       // GLU.gluLookAt(gl, 0, 0, -30, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+
     }
 
     public void onSurfaceCreated(final GL10 gl, final EGLConfig config) {
@@ -149,11 +156,41 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         int action = e.getActionMasked();
         int pointerId = e.getPointerId(index);
 
-
         switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                Log.v("action","action down");
+                if(mVelocityTracker == null) {
+                // Retrieve a new VelocityTracker object to watch the velocity of a motion.
+                    mVelocityTracker = VelocityTracker.obtain();
+                }
+                else {
+                    // Reset the velocity tracker back to its initial state.
+                    mVelocityTracker.clear();
+                }
+                // Add a user's movement to the tracker.
+                mVelocityTracker.addMovement(e);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                Log.v("action","action move");
+                mVelocityTracker.addMovement(e);
+                // When you want to determine the velocity, call
+                // computeCurrentVelocity(). Then call getXVelocity()
+                // and getYVelocity() to retrieve the velocity for each pointer ID.
+                mVelocityTracker.computeCurrentVelocity(1000);
+                // Log velocity of pixels per second
+                // Best practice to use VelocityTrackerCompat where possible.
+                camx++;
+                //camy = camy+VelocityTrackerCompat.getYVelocity(mVelocityTracker,pointerId);
+                Log.v("x ", "camx " +
+                        camx);
+                Log.v("y ", "camy " +
+                        camy);
+
+                break;
             case MotionEvent.ACTION_UP:
+                Log.v("action","action up");
                 if ((x>133 && x<336) && (y>82 && y<277))
-                   return "sun";
+                    return "sun";
                 if ((x>462 && x<522) && (y>157 && y<211))
                     return "mercury";
                 if ((x>579 && x<697) && (y>144 && y<233))
@@ -163,25 +200,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
                 if ((x>954 && x<1112) && (y>115 && y<246))
                     return "mars";
 
-                Log.v("x : ", Float.toString(x));
-                Log.v("y : ", Float.toString(y));
+                Log.v("x is : ", Float.toString(x));
+                Log.v("y is : ", Float.toString(y));
                 break;
-            case MotionEvent.ACTION_MOVE:
-                mVelocityTracker.addMovement(e);
-                // When you want to determine the velocity, call
-                // computeCurrentVelocity(). Then call getXVelocity()
-                // and getYVelocity() to retrieve the velocity for each pointer ID.
-                mVelocityTracker.computeCurrentVelocity(1000);
-                // Log velocity of pixels per second
-                // Best practice to use VelocityTrackerCompat where possible.
-                Log.d("", "X velocity: " +
-                        VelocityTrackerCompat.getXVelocity(mVelocityTracker,
-                                pointerId));
-                Log.d("", "Y velocity: " +
-                        VelocityTrackerCompat.getYVelocity(mVelocityTracker,
-                                pointerId));
-                break;
-
         }
         return "select planet";
     }

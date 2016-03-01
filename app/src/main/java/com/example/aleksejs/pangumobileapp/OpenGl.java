@@ -58,7 +58,7 @@ public class OpenGl extends Activity {
         //});
         this.appView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         this.appView.setRenderer(mRenderer);
-        this.appView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        //this.appView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
         LinearLayout l = (LinearLayout) findViewById(R.id.Glayout);
         l.addView(appView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -80,6 +80,7 @@ public class OpenGl extends Activity {
     public boolean onTouchEvent(MotionEvent e) {
         TextView text = (TextView) findViewById (R.id.textView4);
         text.setText(mRenderer.processTouchEvent(e));
+        appView.requestRender();
         return true;
     }
 

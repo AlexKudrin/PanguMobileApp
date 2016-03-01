@@ -41,6 +41,8 @@ public class GamePanel extends AppCompatActivity {
 
     static boolean running = true;
 
+    String planet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,13 @@ public class GamePanel extends AppCompatActivity {
         background = (ImageView)findViewById(R.id.background);
         distance = (TextView)findViewById(R.id.distance);
         speedText = (TextView)findViewById(R.id.speed);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            planet = extras.getString("planet");
+            Log.v("planet : ", planet);
+        }
+
 
         Thread gameThread = new Thread()
         {
