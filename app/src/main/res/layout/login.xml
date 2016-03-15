@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#000000">
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="420dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:background="#ffffff"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/address"
+        android:layout_alignStart="@+id/address" />
+
+    <EditText
+        android:id="@+id/address"
+        android:layout_width="420dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:inputType="text"
+        android:layout_above="@+id/password"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Pangu mobile app"
+        android:id="@+id/textView5"
+        android:textSize="48dp"
+        android:textColor="#ffffff"
+        android:layout_above="@+id/address"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect"
+        android:layout_marginTop="20dp"
+        android:id="@+id/button3"
+        android:textSize="32dp"
+        android:layout_below="@+id/password"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=""
+        android:id="@+id/textView6"
+        android:layout_below="@+id/button3"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff1111"
+        android:layout_marginTop="30dp"/>
+
+
+</RelativeLayout>
