@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
         try {
             JSONObject jsonObj = new JSONObject(result);
 
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -167,7 +166,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent i = new Intent(getBaseContext(), GamePanel.class);
                 i.putExtra("model", text.getText());
+                i.putExtra("address", address);
                 startActivity(i);
+
             }
         });
 

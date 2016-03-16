@@ -41,7 +41,7 @@ public class GamePanel extends AppCompatActivity {
 
     static boolean running = true;
 
-    String planet;
+    String model, address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +63,11 @@ public class GamePanel extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            planet = extras.getString("planet");
-            Log.v("planet : ", planet);
+            model = extras.getString("model");
+            Log.v("model : ", model);
+
+            address = extras.getString("address");
+            Log.v("address : ", address);
         }
 
 
@@ -177,7 +180,7 @@ public class GamePanel extends AppCompatActivity {
     static public ClientConnection connectToPangu(){
         ClientConnection connectionToPanguServer=null;
         try {
-            Socket connectionSocket = new Socket("192.168.178.158", 10363);
+            Socket connectionSocket = new Socket("10.0.2.2", 10363);
             connectionToPanguServer = new ClientConnection(connectionSocket);
             Log.v("log : ", "COOOONNEEEECTED");
             return connectionToPanguServer;
