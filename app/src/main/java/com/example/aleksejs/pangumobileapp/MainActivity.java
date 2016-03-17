@@ -1,6 +1,8 @@
 package com.example.aleksejs.pangumobileapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,8 +23,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -38,13 +43,19 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_RESULTS="result";
     private static final String TAG_ID = "id";
     private static final String TAG_MODEL_NAME = "model_name";
-    private static final String TAG_MODEL_IMAGE ="model_image";
+    private static final String TAG_MODEL_DESC ="model_description";
 
     JSONArray models = null;
 
     String result;
 
     ArrayList<HashMap<String, String>> modelList;
+
+    ArrayList<String> modelsName = new ArrayList<String>();
+    ArrayList<Bitmap> modelsImages = new ArrayList<Bitmap>();
+    Bitmap bitmap;
+
+    ArrayList<String> modelsDesc = new ArrayList<String>();
 
     ListView list;
 
@@ -121,42 +132,44 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject c = models.getJSONObject(i);
                 String id = c.getString(TAG_ID);
                 String model_name = c.getString(TAG_MODEL_NAME);
-                String model_image = c.getString(TAG_MODEL_IMAGE);
+                String model_desc = c.getString(TAG_MODEL_DESC);
 
                 HashMap<String,String> models = new HashMap<String,String>();
 
-                models.put(TAG_ID,id);
-                models.put(TAG_MODEL_NAME,model_name);
-                models.put(TAG_MODEL_IMAGE,model_image);
-
                 modelList.add(models);
+
+                modelsName.add(model_name);
+
+                modelsDesc.add(model_desc);
+
+                String url = "http://s613660186.websitehome.co.uk/images/" + model_name + ".jpg";
+                Log.v("url : ", url);
+                try {
+                    bitmap = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                modelsImages.add(bitmap);
             }
 
-            ListAdapter adapter = new SimpleAdapter(
-                    MainActivity.this, modelList, R.layout.list_item,
-                    new String[]{TAG_ID,TAG_MODEL_NAME,TAG_MODEL_IMAGE},
-                    new int[]{R.id.id, R.id.model_name, R.id.model_image}
-            );
-
-            list.setAdapter(adapter);
+            list.setAdapter(new CustomAdapter(this, modelsName, modelsImages, modelsDesc));
 
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
-
-                    TextView item = (TextView) view.findViewById(R.id.model_name);
-                    Log.v("item : ", item.getText().toString());
-
-                    text.setText(item.getText().toString());
+                    // TODO Auto-generated method stub
+                    String name = modelsName.get(position);
+                    text.setText(name);
 
                 }
             });
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
 
 
         Button pangu= (Button) findViewById(R.id.button2);
@@ -172,5 +185,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private Bitmap downloadBitmap(String url) {
+        HttpURLConnection urlConnection = null;
+        try {
+            URL uri = new URL(url);
+            urlConnection = (HttpURLConnection) uri.openConnection();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            if (inputStream != null) {
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                return bitmap;
+            }
+        } catch (Exception e) {
+            urlConnection.disconnect();
+            Log.w("ImageDownloader", "Error downloading image from " + url);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return null;
     }
 }

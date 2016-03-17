@@ -1,39 +1,46 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:background="#585858"
-    android:layout_margin="10dp">
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:background="#000000">
 
     <ImageView
         android:id="@+id/model_image"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
         android:gravity="start"
         android:background="@drawable/down"
         android:textStyle="bold"
         android:textColor="#ffffff"/>
 
+
     <TextView
         android:id="@+id/model_name"
-        android:layout_width="fill_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:paddingBottom="2dip"
         android:paddingTop="6dip"
         android:textSize="32dp"
-        android:textColor="#ffffff"/>
-
+        android:textColor="#ffffff"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/model_image" />
 
     <TextView
-        android:id="@+id/id"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"/>
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/model_description"
+        android:textColor="#ffffff"
+        android:textSize="32dp"
+        android:layout_below="@+id/model_name"
+        android:layout_toRightOf="@+id/model_image"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 
-
-</LinearLayout>
+</RelativeLayout>

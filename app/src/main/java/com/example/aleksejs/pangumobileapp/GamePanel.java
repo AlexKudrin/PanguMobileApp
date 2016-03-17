@@ -180,7 +180,7 @@ public class GamePanel extends AppCompatActivity {
     static public ClientConnection connectToPangu(){
         ClientConnection connectionToPanguServer=null;
         try {
-            Socket connectionSocket = new Socket("10.0.2.2", 10363);
+            Socket connectionSocket = new Socket("192.168.0.11", 10363);
             connectionToPanguServer = new ClientConnection(connectionSocket);
             Log.v("log : ", "COOOONNEEEECTED");
             return connectionToPanguServer;
