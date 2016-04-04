@@ -37,7 +37,7 @@
         android:textSize="32dp"
         android:textColor="#ffffff"
         android:id="@+id/textView7"
-        android:layout_alignTop="@+id/selected"
+        android:layout_alignTop="@+id/address"
         android:layout_toLeftOf="@+id/selected"
         android:layout_toStartOf="@+id/selected" />
 
@@ -49,9 +49,9 @@
         android:textSize="32dp"
         android:textColor="#ffffff"
         android:id="@+id/selected"
-        android:layout_alignTop="@+id/address"
-        android:layout_toLeftOf="@+id/button2"
-        android:layout_toStartOf="@+id/button2" />
+        android:layout_alignTop="@+id/checkBox"
+        android:layout_toLeftOf="@+id/checkBox"
+        android:layout_toStartOf="@+id/checkBox" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -73,9 +73,9 @@
         android:id="@+id/checkBox"
         android:buttonTint="#ffffff"
         android:textColor="#ffffff"
-        android:layout_alignBottom="@+id/listView"
-        android:layout_alignRight="@+id/listView"
-        android:layout_alignEnd="@+id/listView" />
+        android:layout_alignTop="@+id/address"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_toStartOf="@+id/button2" />
 
     <Button
         android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.StrictMode;
+import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     String address, port;
 
-    String myJSON;
+
 
     private static final String TAG_RESULTS="result";
     private static final String TAG_ID = "id";
@@ -92,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         if (extras != null) {
             address = extras.getString("address");
             port = extras.getString("port");
-            Log.v("address : ", address);
 
             TextView addressBox = (TextView)findViewById(R.id.address);
             addressBox.setText("server address : " + address);
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         pangu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                finish();
                 Intent i = new Intent(getBaseContext(), GamePanel.class);
                 i.putExtra("model", text.getText());
                 i.putExtra("description", description);

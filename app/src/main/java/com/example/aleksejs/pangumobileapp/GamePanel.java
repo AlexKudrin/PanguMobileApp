@@ -28,7 +28,7 @@ import uk.ac.dundee.spacetech.pangu.ClientLibrary.ClientConnection;
  */
 public class GamePanel extends AppCompatActivity {
 
-    ClientConnection connectToPangu = connectToPangu();
+    ClientConnection connectToPangu;
 
     static float x=0, y=0, z=0, yw=0, pt=-180, rl=0;
 
@@ -79,23 +79,25 @@ public class GamePanel extends AppCompatActivity {
 
             object = Integer.parseInt(extras.getString("pangu_id"));
 
-            try {
-                connectToPangu.setObjectView(object, 1);
-            }
-            catch (IOException ie) {
-                ie.printStackTrace();
-            }
-
             address = extras.getString("address");
             port = extras.getString("port");
 
-            address = "10.0.2.2";
+            address = "192.168.0.5";
             port = "10362";
 
             Log.v("address : ", address);
             Log.v("port : ", port);
 
             description = extras.getString("description");
+        }
+
+        connectToPangu = connectToPangu();
+
+        try {
+            connectToPangu.setObjectView(object, 1);
+        }
+        catch (IOException ie) {
+            ie.printStackTrace();
         }
 
         descriptionView.setText(description);
@@ -218,9 +220,8 @@ public class GamePanel extends AppCompatActivity {
             catch (IOException ie) {
                 ie.printStackTrace();
             }
-
-            this.finish();
         }
+        finish();
         return super.onKeyDown(keyCode, event);
     }
 
