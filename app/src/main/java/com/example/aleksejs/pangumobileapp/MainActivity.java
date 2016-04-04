@@ -36,7 +36,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    String address;
+    String address, port;
 
     String myJSON;
 
@@ -44,10 +44,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_ID = "id";
     private static final String TAG_MODEL_NAME = "model_name";
     private static final String TAG_MODEL_DESC ="model_description";
+    private static final String TAG_MODEL_PANGU ="pangu_id";
+    private static final String TAG_MODEL_DIST ="model_distance";
+    private static final String TAG_MODEL_SPEED ="model_speed";
 
     JSONArray models = null;
 
-    String result;
+    String result, description;
 
     ArrayList<HashMap<String, String>> modelList;
 
@@ -57,9 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<String> modelsDesc = new ArrayList<String>();
 
+    ArrayList<String> modelsPangu = new ArrayList<String>();
+    ArrayList<String> modelsDist = new ArrayList<String>();
+    ArrayList<String> modelsSpeed = new ArrayList<String>();
+
     ListView list;
 
     TextView text;
+
+    String clickedPangu, clickedDistance, clicekedSpeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             address = extras.getString("address");
+            port = extras.getString("port");
             Log.v("address : ", address);
 
             TextView addressBox = (TextView)findViewById(R.id.address);
@@ -91,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             String data = "?" +  URLEncoder.encode("address", "UTF-8")
                     + "=" +  URLEncoder.encode(address, "UTF-8");
+            data += "&" +  URLEncoder.encode("port", "UTF-8")
+                    + "=" +  URLEncoder.encode(port, "UTF-8");
 
             URL url = new URL("http://s613660186.websitehome.co.uk/api_models.php" + data);
 
@@ -133,12 +145,18 @@ public class MainActivity extends AppCompatActivity {
                 String id = c.getString(TAG_ID);
                 String model_name = c.getString(TAG_MODEL_NAME);
                 String model_desc = c.getString(TAG_MODEL_DESC);
+                String pangu_id = c.getString(TAG_MODEL_PANGU);
+                String model_distance = c.getString(TAG_MODEL_DIST);
+                String model_speed = c.getString(TAG_MODEL_SPEED);
 
                 HashMap<String,String> models = new HashMap<String,String>();
 
                 modelList.add(models);
 
                 modelsName.add(model_name);
+                modelsPangu.add(pangu_id);
+                modelsDist.add(model_distance);
+                modelsSpeed.add(model_speed);
 
                 modelsDesc.add(model_desc);
 
@@ -161,6 +179,10 @@ public class MainActivity extends AppCompatActivity {
                                         int position, long id) {
                     // TODO Auto-generated method stub
                     String name = modelsName.get(position);
+                    description = modelsDesc.get(position);
+                    clickedPangu = modelsPangu.get(position);
+                    clickedDistance = modelsDist.get(position);
+                    clicekedSpeed = modelsSpeed.get(position);
                     text.setText(name);
 
                 }
@@ -170,8 +192,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
         Button pangu= (Button) findViewById(R.id.button2);
         pangu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +199,12 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent i = new Intent(getBaseContext(), GamePanel.class);
                 i.putExtra("model", text.getText());
+                i.putExtra("description", description);
+                i.putExtra("pangu_id", clickedPangu);
+                i.putExtra("distance", clickedDistance);
+                i.putExtra("speed", clicekedSpeed);
                 i.putExtra("address", address);
+                i.putExtra("port", port);
                 startActivity(i);
 
             }
@@ -187,25 +212,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private Bitmap downloadBitmap(String url) {
-        HttpURLConnection urlConnection = null;
-        try {
-            URL uri = new URL(url);
-            urlConnection = (HttpURLConnection) uri.openConnection();
 
-            InputStream inputStream = urlConnection.getInputStream();
-            if (inputStream != null) {
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                return bitmap;
-            }
-        } catch (Exception e) {
-            urlConnection.disconnect();
-            Log.w("ImageDownloader", "Error downloading image from " + url);
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
-        return null;
-    }
 }

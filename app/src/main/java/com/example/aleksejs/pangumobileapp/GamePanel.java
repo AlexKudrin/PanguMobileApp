@@ -3,12 +3,14 @@ package com.example.aleksejs.pangumobileapp;
 import com.example.aleksejs.pangumobileapp.JoystickView;
 import com.example.aleksejs.pangumobileapp.JoystickView.OnJoystickMoveListener;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -28,20 +30,22 @@ public class GamePanel extends AppCompatActivity {
 
     ClientConnection connectToPangu = connectToPangu();
 
-    static float x=0, y=600, z=0, yw=0, pt=-180, rl=0;
+    static float x=0, y=0, z=0, yw=0, pt=-180, rl=0;
 
-    static float incpt=0, incyw=0, speed=0;
+    static float incpt=0, incyw=0, speed=0, speedInc;
 
     static ImageView background;
     static Bitmap image;
 
     static private JoystickView joystick;
 
-    static TextView distance, speedText;
+    static TextView distance, speedText, descriptionView;
 
-    static boolean running = true;
+    static boolean running = true, connected;
 
-    String model, address;
+    static String model, address, port, description;
+
+    static int object;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,8 @@ public class GamePanel extends AppCompatActivity {
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        Log.v("connected : ", String.valueOf(connected));
+
         // making it full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -60,16 +66,39 @@ public class GamePanel extends AppCompatActivity {
         background = (ImageView)findViewById(R.id.background);
         distance = (TextView)findViewById(R.id.distance);
         speedText = (TextView)findViewById(R.id.speed);
+        descriptionView = (TextView)findViewById(R.id.textView3);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+
             model = extras.getString("model");
             Log.v("model : ", model);
 
+            y =  Float.parseFloat(extras.getString("distance"));
+            speedInc = Float.parseFloat(extras.getString("speed"));
+
+            object = Integer.parseInt(extras.getString("pangu_id"));
+
+            try {
+                connectToPangu.setObjectView(object, 1);
+            }
+            catch (IOException ie) {
+                ie.printStackTrace();
+            }
+
             address = extras.getString("address");
+            port = extras.getString("port");
+
+            address = "10.0.2.2";
+            port = "10362";
+
             Log.v("address : ", address);
+            Log.v("port : ", port);
+
+            description = extras.getString("description");
         }
 
+        descriptionView.setText(description);
 
         Thread gameThread = new Thread()
         {
@@ -106,14 +135,14 @@ public class GamePanel extends AppCompatActivity {
         Button speedup = (Button) findViewById(R.id.speedup);
         speedup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                speed++;
+                speed=speed+speedInc;
             }
         });
 
         Button speeddown = (Button) findViewById(R.id.speeddown);
         speeddown.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                speed--;
+                speed=speed-speedInc;
             }
         });
 
@@ -177,18 +206,37 @@ public class GamePanel extends AppCompatActivity {
         gameThread.start();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            try {
+                connectToPangu.setObjectView(object, 0);
+                connectToPangu.stop();
+            }
+            catch (IOException ie) {
+                ie.printStackTrace();
+            }
+
+            this.finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     static public ClientConnection connectToPangu(){
         ClientConnection connectionToPanguServer=null;
         try {
-            Socket connectionSocket = new Socket("192.168.0.11", 10363);
+            Socket connectionSocket = new Socket(address, Integer.parseInt(port));
             connectionToPanguServer = new ClientConnection(connectionSocket);
-            Log.v("log : ", "COOOONNEEEECTED");
+            Log.v("log : ", "connected to server");
             return connectionToPanguServer;
         }
         catch (IOException ie) {
             ie.printStackTrace();
         }
-        Log.v("log : ", "not COOOONNEEEECTED");
+        connected = true;
+        Log.v("log : ", "not connected to server");
         return connectionToPanguServer;
     }
 
@@ -227,6 +275,7 @@ public class GamePanel extends AppCompatActivity {
                 rgb[cnt] = pixel[i]>=0?pixel[i]:(pixel[i] + 255);
                 if ((++cnt) == 3) {
                     cnt = 0;
+
                     colors[total++] = Color.rgb(rgb[0], rgb[1], rgb[2]);
                 }
             }

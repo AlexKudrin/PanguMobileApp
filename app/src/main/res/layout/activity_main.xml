@@ -12,8 +12,8 @@
         android:id="@+id/listView"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="60dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,6 +22,8 @@
         android:text="address: "
         android:textSize="32dp"
         android:textColor="#ffffff"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
         android:id="@+id/address"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -30,15 +32,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="selected model: "
+        android:text="selected: "
         android:textSize="32dp"
         android:textColor="#ffffff"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/address"
-        android:layout_toEndOf="@+id/address"
-        android:id="@+id/textView7" />
+        android:id="@+id/textView7"
+        android:layout_alignTop="@+id/selected"
+        android:layout_toLeftOf="@+id/selected"
+        android:layout_toStartOf="@+id/selected" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,9 +49,9 @@
         android:textSize="32dp"
         android:textColor="#ffffff"
         android:id="@+id/selected"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/textView7"
-        android:layout_toEndOf="@+id/textView7" />
+        android:layout_alignTop="@+id/address"
+        android:layout_toLeftOf="@+id/button2"
+        android:layout_toStartOf="@+id/button2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,20 +70,19 @@
         android:layout_height="wrap_content"
         android:text="flight mode"
         android:textSize="32dp"
-        android:layout_marginLeft="20dp"
         android:id="@+id/checkBox"
         android:buttonTint="#ffffff"
         android:textColor="#ffffff"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/selected"
-        android:layout_toEndOf="@+id/selected" />
+        android:layout_alignBottom="@+id/listView"
+        android:layout_alignRight="@+id/listView"
+        android:layout_alignEnd="@+id/listView" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="pangu"
         android:id="@+id/button2"
-        android:textSize="32dp"
+        android:textSize="28dp"
         android:layout_marginRight="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

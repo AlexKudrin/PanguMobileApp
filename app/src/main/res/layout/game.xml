@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:background="#000000">
 
     <ImageView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent"
+
+        android:gravity="center"
         android:id="@+id/background"
+
+        android:scaleType="fitXY"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:scaleType="fitXY"/>
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="96dp"
@@ -34,6 +38,7 @@
         android:background="@drawable/down"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
+
         android:alpha=".3"/>
 
     <TextView
@@ -41,6 +46,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="distance"
+        android:textSize="32dp"
         android:textColor="#ffffff"
         android:id="@+id/textView"
         android:layout_above="@+id/speed"
@@ -53,6 +59,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff"
         android:id="@+id/distance"
+        android:textSize="32dp"
         android:layout_marginTop="33dp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textView"
@@ -65,6 +72,7 @@
         android:text="speed"
         android:textColor="#ffffff"
         android:id="@+id/textView2"
+        android:textSize="32dp"
         android:layout_below="@+id/textView"
         android:layout_alignLeft="@+id/textView"
         android:layout_alignStart="@+id/textView" />
@@ -75,6 +83,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/speed"
         android:textColor="#ffffff"
+        android:textSize="32dp"
         android:layout_marginLeft="5dp"
         android:layout_below="@+id/distance"
         android:layout_toRightOf="@+id/textView2"
@@ -86,20 +95,24 @@
         android:layout_height="225dp"
         android:alpha=".3"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"/>
 
     <TextView
-        android:layout_width="200dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="asteroid information here"
         android:id="@+id/textView3"
+        android:textSize="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
         android:textColor="#ffffff"
-        android:layout_alignBottom="@+id/speed"
+        android:layout_alignTop="@+id/distance"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>

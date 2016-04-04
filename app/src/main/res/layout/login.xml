@@ -5,14 +5,29 @@
 
     <EditText
         android:id="@+id/address"
-        android:layout_width="420dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="#ffffff"
         android:textSize="32dp"
         android:inputType="text"
         android:layout_above="@+id/password"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignLeft="@+id/password"
+        android:layout_alignStart="@+id/password" />
+
+    <EditText
+        android:id="@+id/port"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:textSize="32dp"
+        android:inputType="text"
+        android:layout_marginLeft="10dp"
+        android:layout_alignTop="@+id/address"
+        android:layout_toRightOf="@+id/address"
+        android:layout_alignRight="@+id/password"
+        android:layout_alignEnd="@+id/password" />
 
     <EditText
         android:id="@+id/password"
@@ -22,8 +37,7 @@
         android:textSize="32dp"
         android:background="#ffffff"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/address"
-        android:layout_alignStart="@+id/address" />
+        android:layout_centerHorizontal="true" />
 
 
     <TextView

@@ -49,12 +49,17 @@ public class Login extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 EditText addressBox = (EditText)findViewById(R.id.address);
                 EditText passwordBox = (EditText)findViewById(R.id.password);
+                EditText portBox = (EditText)findViewById(R.id.port);
 
                 String address = addressBox.getText().toString();
                 String password = passwordBox.getText().toString();
+                String port = portBox.getText().toString();
+
                 try {
                     String data = "?" +  URLEncoder.encode("address", "UTF-8")
                             + "=" +  URLEncoder.encode(address, "UTF-8");
+                    data += "&" +  URLEncoder.encode("port", "UTF-8")
+                            + "=" +  URLEncoder.encode(port, "UTF-8");
                     data += "&" + URLEncoder.encode("password", "UTF-8")
                             + "=" + URLEncoder.encode(password, "UTF-8");
 
@@ -90,6 +95,7 @@ public class Login extends AppCompatActivity {
                     if (result=="1"){
                         Intent i = new Intent(getBaseContext(), MainActivity.class);
                         i.putExtra("address", address);
+                        i.putExtra("port", port);
                         startActivity(i);
                     }
                     else{
@@ -101,7 +107,6 @@ public class Login extends AppCompatActivity {
                 catch(Exception e){
 
                 }
-
 
                 return false;
     }});
