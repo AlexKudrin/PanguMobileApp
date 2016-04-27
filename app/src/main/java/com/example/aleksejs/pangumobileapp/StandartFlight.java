@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.Socket;
+
+import java.lang.Math;
 import android.os.Handler;
 
 import uk.ac.dundee.spacetech.pangu.ClientLibrary.ClientConnection;
@@ -26,13 +28,15 @@ import uk.ac.dundee.spacetech.pangu.ClientLibrary.ClientConnection;
 /**
  * Created by Aleksejs on 05/02/2016.
  */
-public class GamePanel extends AppCompatActivity {
+public class StandartFlight extends AppCompatActivity {
 
     ClientConnection connectToPangu;
 
     static float x=0, y=0, z=0, yw=0, pt=-180, rl=0;
 
     static float incpt=0, incyw=0, speed=0, speedInc;
+
+    static double q0t=0, q1t=0, q2t=0, q3t=0;
 
     static ImageView background;
     static Bitmap image;
@@ -41,7 +45,7 @@ public class GamePanel extends AppCompatActivity {
 
     static TextView distance, descriptionView;
 
-    static boolean running = true, connected;
+    static boolean connected;
 
     static String model, address, port, description;
 
@@ -61,7 +65,7 @@ public class GamePanel extends AppCompatActivity {
         // making it full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.game);
+        setContentView(R.layout.standard);
 
         background = (ImageView)findViewById(R.id.background);
         distance = (TextView)findViewById(R.id.distance);
@@ -100,106 +104,64 @@ public class GamePanel extends AppCompatActivity {
 
         descriptionView.setText(description);
 
-        Thread gameThread = new Thread() {
-                @Override
-                public void run() {
-                    while (running) {
 
-                        if (speed > 0) {
-                            y = y - speed * ((float) Math.cos(Math.toRadians(incpt)) * (float) Math.cos(Math.toRadians(incyw)));
-                            z = z + speed * ((float) Math.sin(Math.toRadians(incpt)) * (float) Math.cos(Math.toRadians(incyw)));
-                            x = x + speed * ((float) Math.sin(Math.toRadians(incpt)));
-                        } else if (speed < 0) {
-                            y = y + speed * ((float) Math.cos(Math.toRadians(incpt)) * (float) Math.cos(Math.toRadians(incyw)));
-                            z = z - speed * (float) Math.sin(Math.toRadians(incpt));
-                            x = x - speed * (float) Math.sin(Math.toRadians(incyw));
-                        }
+        setImage(connectToPangu);
 
-                        image = getImage(connectToPangu, x, y, z, yw, pt, rl);
-
-                        runOnUiThread(new Runnable() //run on ui thread
-                        {
-                            public void run() {
-                                distance.setText(String.valueOf(y - 100));
-                                background.setImageBitmap(image);
-                                background.invalidate();
-                            }
-                        });
-                    }
-                }
-            };
 
             Button speedup = (Button) findViewById(R.id.speedup);
             speedup.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    speed = speed + speedInc;
+                    y = y - speedInc*10;
+                    distance.setText(String.valueOf(y - speedInc*10));
+                    setImage(connectToPangu);
                 }
             });
 
             Button speeddown = (Button) findViewById(R.id.speeddown);
             speeddown.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    speed = speed - speedInc;
+                    y = y + speedInc*10;
+                    distance.setText(String.valueOf(y - speedInc*10));
+                    setImage(connectToPangu);
                 }
             });
 
-            joystick = (JoystickView) findViewById(R.id.joystickView);
 
-            joystick.setOnJoystickMoveListener(new OnJoystickMoveListener() {
-                @Override
-                public void onValueChanged(int angle, int power, int direction) {
-                    switch (direction) {
-                        case JoystickView.FRONT:
-                            incpt = incpt + 0.1f;
-                            pt = pt + 0.1f;
-                            break;
+        Button up = (Button) findViewById(R.id.up);
+        up.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getImageStandartMode(connectToPangu, 0, 1, 0);
+                setImage(connectToPangu);
 
-                        case JoystickView.FRONT_RIGHT:
-                            incpt = incpt + 0.1f;
-                            incyw = incyw + 0.1f;
-                            pt = pt + 0.1f;
-                            yw = yw - 0.1f;
-                            break;
+            }
+        });
 
-                        case JoystickView.RIGHT:
-                            incyw = incyw + 0.1f;
-                            yw = yw - 0.1f;
-                            break;
+        Button down = (Button) findViewById(R.id.down);
+        down.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getImageStandartMode(connectToPangu, 0, -1, 0);
+                setImage(connectToPangu);
 
-                        case JoystickView.RIGHT_BOTTOM:
-                            incpt = incpt - 0.1f;
-                            incyw = incyw + 0.1f;
-                            pt = pt - 0.1f;
-                            yw = yw - 0.1f;
-                            break;
+            }
+        });
 
-                        case JoystickView.BOTTOM:
-                            incpt = incpt - 0.1f;
-                            pt = pt - 0.1f;
-                            break;
+        Button right = (Button) findViewById(R.id.right);
+        right.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getImageStandartMode(connectToPangu, 0, 0, 1);
+                setImage(connectToPangu);
 
-                        case JoystickView.BOTTOM_LEFT:
-                            incpt = incpt - 0.1f;
-                            incyw = incyw - 0.1f;
-                            pt = pt - 0.1f;
-                            yw = yw + 0.1f;
-                            break;
+            }
+        });
 
-                        case JoystickView.LEFT:
-                            incyw = incyw - 0.1f;
-                            yw = yw + 0.1f;
-                            break;
+        Button left = (Button) findViewById(R.id.left);
+        left.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getImageStandartMode(connectToPangu, 0, 0, -1);
+                setImage(connectToPangu);
 
-                        case JoystickView.LEFT_FRONT:
-                            incpt = incpt + 0.1f;
-                            incyw = incyw - 0.1f;
-                            pt = pt + 0.1f;
-                            yw = yw + 0.1f;
-                            break;
-                    }
-                }
-            }, JoystickView.DEFAULT_LOOP_INTERVAL);
-
+            }
+        });
 
         Button back = (Button) findViewById(R.id.button4);
         back.setOnClickListener(new View.OnClickListener() {
@@ -208,8 +170,7 @@ public class GamePanel extends AppCompatActivity {
                 try {
                     connectToPangu.setObjectView(object, 0);
                     connectToPangu.stop();
-                }
-                catch (IOException ie) {
+                } catch (IOException ie) {
                     ie.printStackTrace();
                 }
 
@@ -226,24 +187,12 @@ public class GamePanel extends AppCompatActivity {
             }
         });
 
-        gameThread.start();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK))
-        {
-            try {
-                connectToPangu.setObjectView(object, 0);
-                connectToPangu.stop();
-            }
-            catch (IOException ie) {
-                ie.printStackTrace();
-            }
-        }
-        finish();
-        return super.onKeyDown(keyCode, event);
+    static public void setImage(ClientConnection connectToPangu){
+        image = getImage(connectToPangu, x, y, z, yw, pt, rl);
+        background.setImageBitmap(image);
+        background.invalidate();
     }
 
     static public ClientConnection connectToPangu(){
@@ -274,6 +223,27 @@ public class GamePanel extends AppCompatActivity {
         }
         Log.v("log : ", "image failed");
         return bitmapImage;
+    }
+
+    static public void getImageStandartMode(ClientConnection connectToPangu, int xa, int ya, int za){
+        double q0, q1, q2, q3;
+
+        q0 = (double) Math.cos(1.5708 / 2);
+        q1 = (double) xa*Math.sin(1.5708 / 2);
+        q2 = (double) ya*Math.sin(1.5708 / 2);
+        q3 = (double) za*Math.sin(1.5708 / 2);
+
+        q0t = q0t + q0;
+        q1t = q1t + q1;
+        q2t = q2t + q2;
+        q3t = q3t + q3;
+
+        try {
+            connectToPangu.setObjectPositionAttitude(object, 0, 0, 0, q0t, q1t, q2t, q3t);
+        }
+        catch (IOException ie) {
+            ie.printStackTrace();
+        }
     }
 
     public static Bitmap ReadBitmapFromPPM(byte[] file) throws IOException {

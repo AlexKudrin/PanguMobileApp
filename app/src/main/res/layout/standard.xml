@@ -15,7 +15,8 @@
 
         android:scaleType="fitXY"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/button4"
+        android:layout_alignStart="@+id/button4" />
 
     <Button
         android:layout_width="96dp"
@@ -38,6 +39,7 @@
         android:background="@drawable/down"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
+
         android:alpha=".3"/>
 
     <TextView
@@ -58,20 +60,13 @@
         android:textColor="#ffffff"
         android:id="@+id/distance"
         android:textSize="32dp"
+        android:text=""
         android:layout_above="@+id/button4"
         android:layout_toRightOf="@+id/textView"
         android:layout_toEndOf="@+id/textView" />
 
-    <com.example.aleksejs.pangumobileapp.JoystickView
-        android:id="@+id/joystickView"
-        android:layout_width="225dp"
-        android:layout_height="225dp"
-        android:alpha=".3"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"/>
+
+
 
     <TextView
         android:layout_width="400px"
@@ -93,6 +88,47 @@
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:id="@+id/up"
+        android:background="@drawable/up"
+        android:alpha=".3"
+        android:layout_above="@+id/down"
+        android:layout_toRightOf="@+id/left"
+        android:layout_toEndOf="@+id/left" />
+
+    <Button
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:id="@+id/down"
+        android:background="@drawable/down"
+        android:alpha=".3"
+        android:layout_alignTop="@+id/left"
+        android:layout_toLeftOf="@+id/right"
+        android:layout_toStartOf="@+id/right" />
+
+    <Button
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:id="@+id/right"
+        android:background="@drawable/right"
+        android:alpha=".3"
+        android:layout_alignTop="@+id/down"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_marginBottom="10dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:id="@+id/left"
+        android:background="@drawable/left"
+        android:alpha=".3"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/down"
+        android:layout_toStartOf="@+id/down" />
 
 
 </RelativeLayout>

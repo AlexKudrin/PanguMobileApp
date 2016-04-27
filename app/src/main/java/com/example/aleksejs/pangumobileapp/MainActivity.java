@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -37,9 +38,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    String address, port;
-
-
+    String address, port, mode;
 
     private static final String TAG_RESULTS="result";
     private static final String TAG_ID = "id";
@@ -192,12 +191,21 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
         Button pangu= (Button) findViewById(R.id.button2);
         pangu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent i;
+                CheckBox modeBox= (CheckBox) findViewById(R.id.checkBox);
                 finish();
-                Intent i = new Intent(getBaseContext(), GamePanel.class);
+
+                if (modeBox.isChecked())
+                    i = new Intent(getBaseContext(), GamePanel.class);
+                else
+                    i = new Intent(getBaseContext(), StandartFlight.class);
+
                 i.putExtra("model", text.getText());
                 i.putExtra("description", description);
                 i.putExtra("pangu_id", clickedPangu);
@@ -211,6 +219,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
 }

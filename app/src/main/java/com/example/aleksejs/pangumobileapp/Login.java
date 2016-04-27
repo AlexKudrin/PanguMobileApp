@@ -93,6 +93,7 @@ public class Login extends AppCompatActivity {
                     String result = jObject.getString("success");
 
                     if (result=="1"){
+                        finish();
                         Intent i = new Intent(getBaseContext(), MainActivity.class);
                         i.putExtra("address", address);
                         i.putExtra("port", port);

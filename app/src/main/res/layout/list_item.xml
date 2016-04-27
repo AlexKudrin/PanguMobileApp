@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/model_name"
-        android:layout_width="100dp"
+        android:layout_width="200px"
         android:layout_height="wrap_content"
         android:paddingBottom="2dip"
         android:paddingTop="6dip"

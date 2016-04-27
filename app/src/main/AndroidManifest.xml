@@ -25,6 +25,13 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".StandartFlight"
+            android:configChanges="orientation"   android:screenOrientation="landscape">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".Login"
             android:configChanges="orientation"   android:screenOrientation="landscape">
             <intent-filter>
